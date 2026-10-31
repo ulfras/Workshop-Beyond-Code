@@ -161,3 +161,19 @@ Hapus contoh setelah kalian menulis entri pertama. -->
 - **Alternatif yang ditolak:** pemilih rekening di dalam layar Transfer (sheet atau menu); input nomor rekening baru (butuh cek nama pemilik rekening, belum ada); Transfer memuat saldo lagi sendiri (dua layar memuat hal yang sama).
 - **Dampak:** `Features/PilihRekening/`, `Features/Transfer/TransferModel.swift` dan `TransferView.swift` (tanpa state muat), `Core/Navigasi.swift` (`Rute.pilihRekening`, `Rute.transfer(_:saldo:)`), `Features/Beranda/BerandaModel.swift`, `App/PrototipeApp.swift`, `Services/DataTransfer.swift` (`rekeningTujuan` = 3 kontak), `Services/DemoFlags.swift`, `Services/LayananDummy.swift`, test di `Tests/AlurTransferTests.swift` dan `Tests/TopUpTests.swift`.
 - **Commit:** [`hash`]
+
+## 31 Okt 2026 · "Try Face ID Again" di Simulator dan petunjuk khusus Simulator
+
+- **Keputusan:** biometrik dibatalkan tetap di layar Verifikasi (pilihan PO; permintaan "mundur ke halaman sebelumnya" ditutup). Tombol "Try Face ID Again" di alert sistem tidak diubah. Selama Face ID menunggu, layar Verifikasi menampilkan petunjuk "Simulator: Face ID sedang menunggu wajah. Pilih Features › Face ID › Matching Face atau Non-matching Face.", hanya saat `targetEnvironment(simulator)`.
+- **Alasan:** laporan PO: "Try Face ID Again" tidak melakukan apa-apa. Alert itu digambar iOS (LocalAuthentication) dan tidak bisa diubah app. Setelah tombol diketuk, iOS memindai ulang di dalam panggilan `evaluatePolicy` yang sama; Simulator menunggu input wajah dari menu dan tidak menampilkan animasi Face ID, jadi terlihat diam. Di iPhone asli tombol itu memindai ulang.
+- **Alternatif yang ditolak:** menghilangkan "Try Face ID Again" (tidak ada API-nya); membatalkan evaluasi sendiri dengan timer lalu memulai ulang (memotong pemindaian yang sedang berjalan di iPhone asli); menampilkan petunjuk di build iPhone.
+- **Dampak:** `Features/Verifikasi/VerifikasiView.swift`, `docs/userflow.md` (Untuk Tester).
+- **Commit:** [`hash`]
+
+## 31 Okt 2026 · Push "Transfer Berhasil" dengan jingle BRImo
+
+- **Keputusan:** setiap transfer berhasil memunculkan push "Transfer Berhasil" (nominal, penerima, metode otorisasi) dengan jingle BRImo. Push dikirim oleh server dummy (`BankDummy.kirim`), tepat sekali per transfer, setelah saldo terpotong. Kirim ulang dengan id yang sama tidak mengirim lagi, dan transfer gagal atau top up tidak mengirim push. Di app, push ditampilkan sebagai notifikasi lokal (`PengirimPushLokal`); banner dan bunyi juga muncul saat app dibuka (`PenanganNotifikasi`). Izin notifikasi diminta saat transfer pertama berhasil, bukan saat app dibuka. Jingle dari `nada_notif_brimo-www_tiengdong_com.mp3` dikonversi ke `App/Suara/notif_brimo.caf` (IMA4, 3,7 detik), karena iOS tidak memutar MP3 sebagai bunyi notifikasi dan bunyi harus ≤ 30 detik di bundle app.
+- **Alasan:** permintaan PO. Push asli lewat APNs butuh capability Push Notifications (diubah di Xcode, bukan di pbxproj), sertifikat dan server; prototipe belum punya itu. Push dari server dummy menjaga logikanya di tempat yang sama dengan push asli: server yang tahu transfer benar-benar berhasil, dan tidak mengirim dua kali.
+- **Alternatif yang ditolak:** memicu notifikasi dari layar PIN dan Verifikasi (dua tempat, dan bisa dobel saat kirim ulang); meminta izin saat app pertama dibuka; memakai bunyi default iOS.
+- **Dampak:** `Services/PushNotifikasi.swift`, `Services/BankDummy.swift` (`push`), `Services/LayananDummy.swift`, `Services/SumberData.swift` (hanya app yang memakai `PengirimPushLokal`; test dan preview tanpa push), `App/PrototipeApp.swift` (delegate), `App/Suara/notif_brimo.caf`, `scripts/push-transfer-berhasil.apns`, `Tests/PushNotifikasiTests.swift`. Jingle adalah aset BRI: hanya untuk prototipe workshop. File MP3 asli masih di akar repo.
+- **Commit:** [`hash`]

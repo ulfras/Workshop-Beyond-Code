@@ -9,10 +9,12 @@ struct LayananDummy: LayananData {
     var ikutiDemoFlags: Bool
     let bank: BankDummy
 
-    init(jeda: Duration = .milliseconds(600), ikutiDemoFlags: Bool = true, bank: BankDummy? = nil) {
+    /// `push` hanya diisi app (`SumberData.layanan()`); preview dan test tanpa push.
+    init(jeda: Duration = .milliseconds(600), ikutiDemoFlags: Bool = true, bank: BankDummy? = nil,
+         push: (any PengirimPush)? = nil) {
         self.jeda = jeda
         self.ikutiDemoFlags = ikutiDemoFlags
-        self.bank = bank ?? BankDummy(sekarang: Self.jamServer(ikutiDemoFlags: ikutiDemoFlags))
+        self.bank = bank ?? BankDummy(sekarang: Self.jamServer(ikutiDemoFlags: ikutiDemoFlags), push: push)
     }
 
     func daftarContoh() async throws -> [ItemContoh] {

@@ -17,7 +17,8 @@ enum SumberData {
         let sumber = teks("SumberData", di: bundle)
         let layanan = pilih(sumber: sumber,
                             host: teks("SupabaseHost", di: bundle),
-                            kunci: teks("SupabasePublishableKey", di: bundle))
+                            kunci: teks("SupabasePublishableKey", di: bundle),
+                            push: PengirimPushLokal())
         #if DEBUG
         if layanan is LayananSupabase {
             print("[Prototipe] Sumber data: Supabase")
@@ -31,11 +32,12 @@ enum SumberData {
     }
 
     /// Logika pilihannya, tanpa Bundle, supaya bisa dites.
-    static func pilih(sumber: String?, host: String?, kunci: String?) -> any LayananData {
+    /// `push`: push "Transfer berhasil" dari server dummy (app memakai `PengirimPushLokal`; test tanpa push).
+    static func pilih(sumber: String?, host: String?, kunci: String?, push: (any PengirimPush)? = nil) -> any LayananData {
         if let konfigurasi = konfigurasiSupabase(sumber: sumber, host: host, kunci: kunci) {
-            return LayananSupabase(konfigurasi: konfigurasi)
+            return LayananSupabase(konfigurasi: konfigurasi, cadanganTransfer: LayananDummy(push: push))
         }
-        return LayananDummy()
+        return LayananDummy(push: push)
     }
 
     static func konfigurasiSupabase(sumber: String?, host: String?, kunci: String?) -> KonfigurasiSupabase? {

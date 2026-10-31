@@ -1,0 +1,11 @@
+{
+  "Simulator Target Bundle": "id.workshop.f3.kelompok3",
+  "aps": {
+    "alert": {
+      "title": "Transfer Berhasil",
+      "body": "Rp7.500.000 ke Ayu Contoh. Diotorisasi dengan Passkey + Biometrik."
+    },
+    "sound": "notif_brimo.caf",
+    "thread-id": "transfer-berhasil"
+  }
+}

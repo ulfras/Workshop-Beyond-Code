@@ -24,6 +24,8 @@ actor BankDummy {
     private let kunciPublik: Data
     private let aturan: AturanRisiko
     private let sekarang: @Sendable () -> Date
+    /// Push "Transfer berhasil" ke perangkat nasabah. `nil` di test dan preview.
+    private let push: (any PengirimPush)?
 
     private var terdaftar: [UUID: PermintaanTransfer] = [:]
     private var percobaanSalah: [UUID: Int] = [:]
@@ -40,8 +42,10 @@ actor BankDummy {
          riwayat: [BuktiTransfer]? = nil,
          pinBenar: String = "000000",
          kunciPublik: Data = KunciPerangkat.kunciPublik,
-         aturan: AturanRisiko = AturanRisiko()) {
+         aturan: AturanRisiko = AturanRisiko(),
+         push: (any PengirimPush)? = nil) {
         self.sekarang = sekarang
+        self.push = push
         self.akun = akun
         self.tujuan = tujuan
         let awal = riwayat ?? DataTransfer.riwayatAwal(sekarang: sekarang())
@@ -140,6 +144,9 @@ actor BankDummy {
         let bukti = BuktiTransfer(permintaan: permintaan, metode: metode, waktu: waktu)
         transaksi.append(bukti)
         kotakNotifikasi.append(Self.notifikasiBerhasil(bukti))
+        // Seperti server bank: push dikirim sekali, setelah saldo terpotong. Kirim ulang dengan id yang sama
+        // kembali lebih awal di atas, jadi tidak sampai ke sini.
+        push?.transferBerhasil(bukti)
         selesai[permintaan.id] = bukti
         terdaftar[permintaan.id] = nil
         pinLulus.remove(permintaan.id)

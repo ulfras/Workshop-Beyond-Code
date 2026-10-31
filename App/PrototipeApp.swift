@@ -1,4 +1,5 @@
 import SwiftUI
+import UserNotifications
 
 @main
 struct PrototipeApp: App {
@@ -9,6 +10,11 @@ struct PrototipeApp: App {
     private let biometrik: any Biometrik = BiometrikPerangkat()
     /// Simulasi passkey (Services/Passkey.swift).
     private let penandatangan: any Penandatangan = PenandatanganPerangkat()
+
+    init() {
+        // Banner dan jingle push "Transfer berhasil" tetap muncul saat app dibuka (Services/PushNotifikasi.swift).
+        UNUserNotificationCenter.current().delegate = PenanganNotifikasi.shared
+    }
 
     var body: some Scene {
         WindowGroup {

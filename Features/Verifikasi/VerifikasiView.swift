@@ -74,9 +74,18 @@ struct VerifikasiView: View {
             .accessibilityLabel("Verifikasi dengan \(model.namaBiometrik)")
             Group {
                 if model.tahap == .memverifikasi {
-                    ProgressView()
-                        .tint(Warna.utamaTeks)
-                        .accessibilityLabel("Memverifikasi")
+                    VStack(spacing: Space.s) {
+                        ProgressView()
+                            .tint(Warna.utamaTeks)
+                            .accessibilityLabel("Memverifikasi")
+                        #if targetEnvironment(simulator)
+                        // Simulator tidak punya kamera dan tidak menampilkan animasi Face ID: setelah "Try Face ID Again"
+                        // iOS menunggu wajah dari menu. Tidak ada di build iPhone (docs/DECISIONS.md, 31 Okt 2026).
+                        Text("Simulator: Face ID sedang menunggu wajah. Pilih Features › Face ID › Matching Face atau Non-matching Face.")
+                            .font(Teks.keterangan)
+                            .multilineTextAlignment(.center)
+                        #endif
+                    }
                 } else if case .ulang = model.tahap {
                     EmptyView()
                 } else {
