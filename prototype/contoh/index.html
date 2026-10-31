@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Contoh · prototype (ganti dengan prototype dari sesi Dana)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!--
+    CONTOH, ganti dengan prototype dari sesi Dana.
+    Prototype ini menggambar layar Features/Contoh di starter: state berhasil, baris pertama terpilih.
+    Bandingkan dengan Features/Contoh/ContohView.swift untuk melihat cara HTML menjadi SwiftUI native.
+    Status bar palsu dan pita "CONTOH" bukan bagian layar: jangan dibangun.
+    Data di bawah adalah data dummy (Services/DataContoh.swift), bukan data nasabah.
+  -->
+  <div class="status-bar" aria-hidden="true">9:41</div>
+  <div class="pita-contoh" aria-hidden="true">CONTOH · ganti dengan prototype dari sesi Dana</div>
+
+  <header class="topbar">
+    <h1>Contoh</h1>
+  </header>
+
+  <main>
+    <ul class="daftar" aria-label="Daftar contoh">
+      <li class="baris terpilih" role="button" aria-pressed="true">
+        <span class="ikon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M8 13l4 4 4-4"/></svg>
+        </span>
+        <span class="teks">
+          <span class="judul">Budi Contoh</span>
+          <span class="keterangan">Transfer masuk · Hari ini</span>
+        </span>
+        <span class="nominal">Rp125.000</span>
+        <span class="pilih" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+      </li>
+      <li class="baris" role="button" aria-pressed="false">
+        <span class="ikon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+        </span>
+        <span class="teks">
+          <span class="judul">Tagihan listrik</span>
+          <span class="keterangan">Jatuh tempo 5 Nov</span>
+        </span>
+        <span class="nominal">Rp350.000</span>
+        <span class="pilih" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+      </li>
+      <li class="baris" role="button" aria-pressed="false">
+        <span class="ikon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5V8z"/><path d="M16 9h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M3 21h16"/></svg>
+        </span>
+        <span class="teks">
+          <span class="judul">Ngopi sore</span>
+          <span class="keterangan">Kedai Kopi Senja · Kemarin</span>
+        </span>
+        <span class="nominal">Rp86.000</span>
+        <span class="pilih" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+      </li>
+    </ul>
+  </main>
+
+  <footer class="aksi-bawah">
+    <button class="tombol-utama" type="button">Lanjut</button>
+  </footer>
+</body>
+</html>

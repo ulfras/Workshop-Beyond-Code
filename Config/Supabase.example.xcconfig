@@ -1,0 +1,20 @@
+// Config/Supabase.example.xcconfig · template untuk Config/Supabase.xcconfig (file itu TIDAK di-commit).
+// Jalur Supabase opsional. Langkah lengkap: docs/supabase-opsional.md.
+//
+// 1. Salin file ini di Finder atau Terminal menjadi Config/Supabase.xcconfig, di folder yang sama:
+//      cp Config/Supabase.example.xcconfig Config/Supabase.xcconfig
+//    Jangan pakai "Add Configuration File…" di Xcode. Proyek sudah memuat file itu lewat Config/Proyek.xcconfig.
+// 2. Isi dua nilai dari mentor kelompok.
+// 3. Cmd+B lalu Cmd+R. Console menulis "[Prototipe] Sumber data: Supabase".
+//
+// HANYA kunci publishable (sb_publishable_…) atau kunci anon lama yang boleh ada di sini.
+// JANGAN PERNAH kunci secret (sb_secret_…) atau kunci service role: isi app bisa dibongkar,
+// dan kunci itu melewati Row Level Security.
+
+// Host saja, tanpa "https://". Di file .xcconfig, "//" memulai komentar, jadi URL lengkap akan terpotong.
+SUPABASE_HOST = your-project-ref.supabase.co
+
+SUPABASE_PUBLISHABLE_KEY = sb_publishable_xxxxxxxxxxxxxxxxxxxxxxxx
+
+// Pakai Supabase. Ganti menjadi dummy (atau hapus file Supabase.xcconfig) untuk kembali ke data dummy.
+SUMBER_DATA = supabase

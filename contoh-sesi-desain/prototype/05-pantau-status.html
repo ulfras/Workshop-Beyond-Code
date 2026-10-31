@@ -1,0 +1,78 @@
+<!doctype html>
+<!--
+  Tagih teman · 05 Pantau status (docs/userflow.md #05), judul layar "Tagihan aktif"
+  Contoh hasil sesi desain: prototype Tagih teman.
+  Hanya state berhasil. Tidak ada pengingat otomatis (Should, belum dibangun).
+-->
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tagihan aktif · Tagih teman</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="screen">
+
+    <div class="status-bar" aria-hidden="true">
+      <span>9:41</span>
+      <span class="icons">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.4c2.3 0 4.4.9 6 2.4l1.2-1.2C13.3 1.7 10.8.7 8 .7S2.7 1.7.8 3.6L2 4.8c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.3 0 2.5.5 3.5 1.3l1.2-1.2C11.4 4.9 9.8 4.2 8 4.2s-3.4.7-4.7 1.8l1.2 1.2c1-.8 2.2-1.3 3.5-1.3zM8 9.4c-.6 0-1.1.2-1.5.6L8 11.5l1.5-1.5c-.4-.4-.9-.6-1.5-.6z"/></svg>
+        <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="22" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="19" height="9" rx="2" fill="currentColor"/><rect x="24" y="4.5" width="2" height="4" rx="1" fill="currentColor" opacity=".4"/></svg>
+      </span>
+    </div>
+
+    <header class="app-bar">
+      <div class="nav-row"></div>
+      <h1>Tagihan aktif</h1>
+      <p class="subtitle">Warung Bu Sri · Rp180.000 dari 3 teman</p>
+    </header>
+
+    <main class="content">
+
+      <div class="card summary-card">
+        <p class="eyebrow small">Terkumpul</p>
+        <p class="big-amount">Rp60.000</p>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="180000" aria-valuenow="60000">
+          <div class="bar" style="width: 33.3%"></div>
+        </div>
+        <p class="note">1 dari 3 teman sudah membayar</p>
+      </div>
+
+      <div class="card stack">
+        <div class="row">
+          <span class="avatar c1">A</span>
+          <span class="row-text">
+            <span class="row-title">Ayu</span>
+            <span class="row-caption">Rp60.000</span>
+          </span>
+          <span class="pill belum">Belum</span>
+        </div>
+        <div class="row">
+          <span class="avatar c2">B</span>
+          <span class="row-text">
+            <span class="row-title">Bima</span>
+            <span class="row-caption">Rp60.000</span>
+          </span>
+          <span class="pill lunas">Lunas</span>
+        </div>
+        <div class="row">
+          <span class="avatar c3">C</span>
+          <span class="row-text">
+            <span class="row-title">Citra</span>
+            <span class="row-caption">Rp60.000</span>
+          </span>
+          <span class="pill belum">Belum</span>
+        </div>
+      </div>
+
+    </main>
+
+    <div class="bottom-bar">
+      <a class="btn-primary" href="01-pilih-transaksi.html" role="button">Selesai</a>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,171 @@
+/* CONTOH, ganti dengan prototype dari sesi Dana.
+   Token di :root bernilai sama dengan DESIGN.md (nama variabel = kunci di DESIGN.md).
+   Agen memetakan token ini ke DesignSystem/Tokens.swift, bukan menyalin CSS ke view. */
+
+:root {
+  /* colors */
+  --color-primary: #5E5CE6;
+  --color-on-primary: #FFFFFF;
+  --color-background: #F2F2F7;
+  --color-surface: #FFFFFF;
+  --color-text: #1D1D1F;
+  --color-text-secondary: #6E6E73;
+  --color-separator: #E5E5EA;
+  --color-success: #248A3D;
+  --color-warning: #C93400;
+  --color-danger: #FF453A;
+
+  /* rounded */
+  --rounded-sm: 8px;
+  --rounded-md: 14px;
+  --rounded-lg: 20px;
+  --rounded-button: 9999px;
+
+  /* spacing.scale */
+  --space-xs: 4px;
+  --space-s: 8px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --space-xl: 32px;
+
+  /* typography */
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", system-ui, sans-serif;
+  --font-rounded: ui-rounded, "SF Pro Rounded", var(--font);
+  --text-title: 700 34px/41px var(--font-rounded);
+  --text-heading: 600 20px/25px var(--font);
+  --text-body: 400 17px/22px var(--font);
+  --text-body-strong: 600 17px/22px var(--font);
+  --text-caption: 400 15px/20px var(--font);
+  --text-label: 600 13px/18px var(--font);
+}
+
+/* Mode gelap: sama dengan nilai `gelap:` di Tokens.swift */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #7D7AFF;
+    --color-background: #000000;
+    --color-surface: #1C1C1E;
+    --color-text: #F5F5F7;
+    --color-text-secondary: #98989D;
+    --color-separator: #38383A;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  padding-bottom: 100px;
+  background: var(--color-background);
+  color: var(--color-text);
+  font: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Status bar palsu: iOS menggambarnya sendiri. Jangan dibangun. */
+.status-bar {
+  height: 47px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-xl);
+  font: var(--text-body-strong);
+}
+
+/* Pita penanda contoh. Bukan bagian layar. */
+.pita-contoh {
+  margin: 0 var(--space-m) var(--space-s);
+  padding: 6px var(--space-s);
+  border: 1.5px dashed var(--color-warning);
+  border-radius: var(--rounded-sm);
+  color: var(--color-warning);
+  font: var(--text-label);
+  text-align: center;
+}
+
+/* Header web. Di SwiftUI: .navigationTitle("Contoh"). */
+.topbar { padding: var(--space-s) var(--space-m); }
+.topbar h1 { font: 700 34px/41px var(--font); }
+
+main { padding: var(--space-s) var(--space-m); }
+
+/* Daftar. Di SwiftUI: List + BarisItem. */
+.daftar {
+  list-style: none;
+  background: var(--color-surface);
+  border-radius: var(--rounded-lg);
+  overflow: hidden;
+}
+
+.baris {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-m);
+  min-height: 44px;
+  padding: 12px var(--space-m);
+  cursor: pointer;
+}
+.baris + .baris::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 68px;
+  right: 0;
+  height: 1px;
+  background: var(--color-separator);
+}
+.baris:hover { filter: brightness(0.98); } /* hover: hanya web, jangan ditiru */
+
+.ikon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: var(--color-background);
+  border-radius: var(--rounded-sm);
+  color: var(--color-primary);
+}
+.ikon svg { width: 20px; height: 20px; }
+
+.teks { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-xs); }
+.judul { font: var(--text-body-strong); }
+.keterangan { font: var(--text-caption); color: var(--color-text-secondary); }
+.nominal { font: var(--text-body-strong); font-variant-numeric: tabular-nums; }
+
+.pilih {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--color-separator);
+  border-radius: 50%;
+  color: var(--color-on-primary);
+}
+.pilih svg { width: 14px; height: 14px; visibility: hidden; }
+.terpilih .pilih { background: var(--color-primary); border-color: var(--color-primary); }
+.terpilih .pilih svg { visibility: visible; }
+
+/* Tombol utama menempel di bawah. Di SwiftUI: .safeAreaInset(edge: .bottom) + PrimaryButton. */
+.aksi-bawah {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--space-m);
+  padding-bottom: calc(var(--space-m) + env(safe-area-inset-bottom, 0px));
+  background: var(--color-background);
+}
+.tombol-utama {
+  display: block;
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: var(--rounded-button);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font: var(--text-body-strong);
+  cursor: pointer;
+}
+.tombol-utama:disabled { background: var(--color-separator); color: var(--color-text-secondary); }

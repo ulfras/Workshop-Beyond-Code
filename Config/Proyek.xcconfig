@@ -1,0 +1,23 @@
+// Config/Proyek.xcconfig · setting proyek Prototipe. File ini di-commit, jadi JANGAN isi kunci apa pun di sini.
+// NAMA_APP dan BUNDLE_ID_DASAR diganti agen lewat prompt P1 (docs/kartu-prompt.md). Boleh diubah dengan tangan, lalu Cmd+B.
+// Di file .xcconfig, "//" memulai komentar.
+
+// Nama app di layar Simulator dan iPhone.
+NAMA_APP = BRImo
+
+// Bundle ID. Harus unik kalau app dijalankan di iPhone dengan Personal Team.
+// Kalau Xcode bilang sudah dipakai, tambahkan akhiran, misalnya id.workshop.f3.kelompok1.ayu
+BUNDLE_ID_DASAR = id.workshop.f3.kelompok3
+
+// Ikon app dari App/Assets.xcassets/AppIcon.appiconset (dibuat dengan scripts/buat-aset-logo.swift).
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
+
+// Team untuk iPhone. Biarkan kosong: Simulator tidak butuh team.
+// Untuk iPhone, pilih (Personal Team) di target Prototipe > Signing & Capabilities (docs/mulai-di-xcode.md).
+DEVELOPMENT_TEAM =
+
+// Sumber data app: dummy (default). Mode supabase diaktifkan di Config/Supabase.xcconfig (docs/supabase-opsional.md).
+SUMBER_DATA = dummy
+
+// Opsional dan tidak di-commit: host + kunci publishable Supabase. Tanda ? = build tetap jalan kalau file itu tidak ada.
+#include? "Supabase.xcconfig"
