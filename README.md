@@ -56,7 +56,7 @@ Setiap layar punya state berhasil, memuat, kosong dan gagal (atau "Tidak ada" de
 - Face ID / Touch ID memakai LocalAuthentication.
 - Tanda tangannya memakai kunci P-256 CryptoKit di memori perangkat, lalu diverifikasi backend dummy dengan public key terdaftar (`Services/Passkey.swift`, `Services/Biometrik.swift`).
 
-**Push "Transfer Berhasil"** (`Services/PushNotifikasi.swift`): server dummy mengirim tepat satu push setelah transfer berhasil, lengkap dengan banner dan jingle BRImo (`App/Suara/notif_brimo.caf`), juga saat app dibuka. Ini disimulasikan dengan notifikasi lokal; push asli lewat APNs butuh server dan capability Push Notifications.
+**Push "Transfer Berhasil"** (`Services/PushNotifikasi.swift`): server dummy mengirim tepat satu push setelah transfer berhasil, dengan banner dan jingle BRImo (`App/Suara/notif_brimo.caf`). Saat app dibuka, jingle diputar app sendiri, jadi tetap terdengar walaupun izin notifikasi belum diberikan. Ini disimulasikan dengan notifikasi lokal; push asli lewat APNs butuh server dan capability Push Notifications.
 
 Passkey asli belum bisa dibangun karena butuh domain, entitlement Associated Domains dan server relying party. Alasannya di `docs/DECISIONS.md`.
 
@@ -75,7 +75,7 @@ Untuk mencoba:
 - **Face ID di Simulator:** centang Features › Face ID › Enrolled. Saat prompt muncul, pilih Matching Face (lulus) atau Non-matching Face (gagal).
   - Simulator tidak punya kamera. Setelah "Try Face ID Again" diketuk, iOS menunggu kalian memilih wajah lagi dari menu. Selama menunggu, layar Verifikasi menampilkan petunjuknya (hanya di Simulator).
 - **Top Up:** Beranda › Top Up › chip Rp500.000 › "Top Up".
-- **Push dengan jingle:** transfer pertama yang berhasil meminta izin notifikasi (ketuk Allow). Untuk mendengar jingle tanpa transfer: `xcrun simctl push booted id.workshop.f3.kelompok3 scripts/push-transfer-berhasil.apns`.
+- **Push dengan jingle:** transfer yang berhasil memutar jingle; transfer pertama juga meminta izin notifikasi untuk banner (ketuk Allow). Cek audio tanpa transfer: jalankan dengan `-demoJingle YES`. Push dari luar app (butuh izin): `xcrun simctl push booted id.workshop.f3.kelompok3 scripts/push-transfer-berhasil.apns`.
 
 **Memaksa state** lewat Xcode › Product › Scheme › Edit Scheme › Run › Arguments, atau `bash scripts/simulator-demo.sh paksa <flag> <nilai>`:
 
@@ -90,6 +90,7 @@ Untuk mencoba:
 | `-demoRiwayat`, `-demoNotifikasi` | `memuat` / `kosong` / `gagal` | Riwayat, Notifikasi |
 | `-demoTopUp` | `memuat` / `kosong` / `gagal` | Kirim top up |
 | `-demoJam` | `23:00` | Jam server dummy |
+| `-demoJingle` | `YES` | Build debug: memutar jingle saat app dibuka (cek audio) |
 | `-demoMulai` | `rekening` / `transfer` / `pin` / `verifikasi` / `berhasil` / `riwayat` / `notifikasi` / `topup` | Build debug: membuka layar itu langsung, untuk screenshot dan cek tata letak |
 
 ## Dari starter sampai sekarang
@@ -121,7 +122,7 @@ Beda yang disengaja dari prototype tercatat di `docs/userflow.md`:
 
 ## Status
 
-- Build bersih tanpa warning. **109 fungsi test lulus** (172 run termasuk test berparameter), 0 gagal. Test meliputi aturan FDS, backend dummy (PIN, passkey, tantangan, idempotensi), alur layar, Riwayat, Notifikasi, Top Up dan push.
+- Build bersih tanpa warning. **111 fungsi test lulus**, 0 gagal. Test meliputi aturan FDS, backend dummy (PIN, passkey, tantangan, idempotensi), alur layar, Riwayat, Notifikasi, Top Up dan push.
 - Dicek di Simulator iPhone 17 Pro: Beranda, Pilih Rekening, Transfer, PIN, Riwayat, Notifikasi dan Top Up dalam mode terang dan gelap. Sebagian juga dicek dengan teks besar.
 - **Belum** dicek manusia:
   - preview di Canvas Xcode;

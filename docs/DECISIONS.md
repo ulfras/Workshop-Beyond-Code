@@ -177,3 +177,11 @@ Hapus contoh setelah kalian menulis entri pertama. -->
 - **Alternatif yang ditolak:** memicu notifikasi dari layar PIN dan Verifikasi (dua tempat, dan bisa dobel saat kirim ulang); meminta izin saat app pertama dibuka; memakai bunyi default iOS.
 - **Dampak:** `Services/PushNotifikasi.swift`, `Services/BankDummy.swift` (`push`), `Services/LayananDummy.swift`, `Services/SumberData.swift` (hanya app yang memakai `PengirimPushLokal`; test dan preview tanpa push), `App/PrototipeApp.swift` (delegate), `App/Suara/notif_brimo.caf`, `scripts/push-transfer-berhasil.apns`, `Tests/PushNotifikasiTests.swift`. Jingle adalah aset BRI: hanya untuk prototipe workshop. File MP3 asli masih di akar repo.
 - **Commit:** [`hash`]
+
+## 31 Okt 2026 · Jingle transfer berhasil diputar app saat app dibuka
+
+- **Keputusan:** saat transfer berhasil dan app aktif, jingle BRImo diputar app sendiri (`JingleBRImo`, System Sound Services, ikut volume dering dan mode senyap). Banner yang tampil saat app dibuka tidak lagi membawa bunyi (`PenanganNotifikasi.opsiSaatDibuka = [.banner, .list]`), supaya jingle tidak dobel. Saat app di latar belakang, iOS tetap memutar jingle lewat notifikasi. Ditambah `-demoJingle YES` (build debug) untuk mengecek audio tanpa transfer.
+- **Alasan:** laporan PO: suara notifikasi tidak terdengar. Diagnosis di Simulator: app tidak punya izin notifikasi (log SpringBoard `effective section info hasResult: 0`), jadi iOS tidak menampilkan banner maupun bunyi; izin hanya bisa diberikan dengan mengetuk Allow, dan izin hilang setiap app dihapus. Sebelumnya jingle hanya dibunyikan notifikasi, sehingga tanpa izin tidak pernah terdengar. Transfer berhasil selalu terjadi di dalam app, jadi pemutaran dari app adalah jalur yang selalu jalan.
+- **Alternatif yang ditolak:** meminta izin notifikasi saat app dibuka (mengganggu sebelum nasabah butuh); AVAudioPlayer (perlu mengatur audio session, dan tidak ikut mode senyap); memutar jingle dari app dan notifikasi bersamaan (dobel).
+- **Dampak:** `Services/PushNotifikasi.swift`, `Services/DemoFlags.swift`, `App/PrototipeApp.swift`, test `jingleBisaDiputar` dan `bannerTanpaBunyiGanda` di `Tests/PushNotifikasiTests.swift`.
+- **Commit:** [`hash`]

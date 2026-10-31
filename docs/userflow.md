@@ -72,7 +72,7 @@ Aturan field nominal (Transfer dan Top Up, `ValidasiTransfer.rapikan`): titik ri
 - **Saldo dummy:** Rp125.000.000. Riwayat dummy: satu transfer Rp20.000.000 satu jam sebelum app dibuka.
 - **Face ID di Simulator:** Features › Face ID › Enrolled (centang), lalu saat prompt muncul: Matching Face (lulus) atau Non-matching Face (gagal). Tanpa Enrolled, layar menampilkan "Face ID belum diaktifkan". Setelah Non-matching Face, iOS menampilkan alert sistem "Face Not Recognized" dengan "Try Face ID Again" dan "Cancel". Alert ini milik iOS, bukan app. Di Simulator, "Try Face ID Again" terlihat tidak melakukan apa-apa: iOS sedang memindai lagi, tapi Simulator tidak punya kamera dan tidak menampilkan animasi Face ID. Pilih lagi Features › Face ID › Matching Face (lulus) atau Non-matching Face (gagal); layar Verifikasi menampilkan petunjuk ini selama menunggu (hanya di Simulator). Di iPhone asli tombol itu langsung memindai ulang. "Cancel" di alert → tombol "Coba lagi" di layar memanggil Face ID lagi.
 - **Top Up:** chip Rp500.000 → "Top Up" → saldo di Beranda bertambah Rp500.000.
-- **Push "Transfer Berhasil" dengan jingle BRImo:** transfer pertama yang berhasil memunculkan dialog izin notifikasi; ketuk Allow. Setelah itu setiap transfer berhasil memunculkan banner "Transfer Berhasil" (nominal, penerima, metode otorisasi) dengan jingle BRImo, juga saat app dibuka. Nyalakan suara Mac dan matikan mode senyap. Untuk mendengar jingle tanpa transfer (setelah izin diberikan): `xcrun simctl push booted id.workshop.f3.kelompok3 scripts/push-transfer-berhasil.apns`. Izin ditolak? Settings › Notifications › BRImo, atau hapus app lalu jalankan lagi.
+- **Push "Transfer Berhasil" dengan jingle BRImo:** setiap transfer berhasil memutar jingle BRImo, diputar app sendiri karena app sedang dibuka, jadi tetap terdengar walaupun izin notifikasi belum diberikan. Transfer pertama yang berhasil memunculkan dialog izin notifikasi; setelah Allow, banner "Transfer Berhasil" (nominal, penerima, metode otorisasi) juga muncul, tanpa bunyi kedua. Saat app di latar belakang, jingle diputar iOS lewat notifikasi. Cek audio tanpa transfer: jalankan dengan `-demoJingle YES`. Nyalakan suara Mac dan matikan mode senyap. Untuk mendengar jingle tanpa transfer (setelah izin diberikan): `xcrun simctl push booted id.workshop.f3.kelompok3 scripts/push-transfer-berhasil.apns`. Izin ditolak? Settings › Notifications › BRImo, atau hapus app lalu jalankan lagi.
 - **Jalur risiko tinggi siang hari:** chip Rp75.000.000.
 - **Jalur jam malam:** jalankan dengan `-demoJam 23:00`, lalu chip Rp10.000.000 → total Rp30.000.000 → normal; ketik Rp15.000.000 → total Rp35.000.000 → sheet peringatan.
 
@@ -87,6 +87,7 @@ Launch argument (Xcode › Edit Scheme › Run › Arguments, atau `bash scripts
 | `-demoKirim` | `gagal` | Transfer belum terkirim |
 | `-demoSignature` | `gagal` | Server menolak signature passkey |
 | `-demoJam` | `23:00` (HH:mm) | Jam server dummy dimulai dari jam itu |
+| `-demoJingle` | `YES` | Hanya build debug: jingle BRImo diputar saat app dibuka (cek audio) |
 | `-demoRiwayat` | `memuat` / `kosong` / `gagal` | State Riwayat |
 | `-demoNotifikasi` | `memuat` / `kosong` / `gagal` | State Notifikasi (juga titik lonceng di Beranda) |
 | `-demoTopUp` | `memuat` / `kosong` / `gagal` | Kirim top up tidak pernah selesai / belum ada rekening / koneksi putus |
