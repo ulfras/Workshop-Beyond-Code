@@ -59,6 +59,9 @@ enum DemoFlags {
         }
     }
 
+    /// `-demoJingle YES`: jingle BRImo diputar saat app dibuka, untuk mengecek audio Simulator/iPhone tanpa transfer.
+    static var putarJingleSaatBuka: Bool { UserDefaults.standard.bool(forKey: "demoJingle") }
+
     static func uraiJam(_ teks: String) -> (jam: Int, menit: Int)? {
         let bagian = teks.split(separator: ":")
         guard bagian.count == 2, let jam = Int(bagian[0]), let menit = Int(bagian[1]),

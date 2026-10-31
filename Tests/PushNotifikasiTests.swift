@@ -113,6 +113,17 @@ struct PushNotifikasiTests {
         #expect(req.content.userInfo["idTransfer"] as? String == bukti.permintaan.id.uuidString)
     }
 
+    @Test("Jingle bisa dimuat sebagai system sound untuk diputar app saat transfer berhasil")
+    func jingleBisaDiputar() {
+        #expect(JingleBRImo.tersedia)
+    }
+
+    @Test("Banner saat app dibuka tanpa bunyi notifikasi, supaya jingle dari app tidak dobel")
+    func bannerTanpaBunyiGanda() {
+        #expect(PenanganNotifikasi.opsiSaatDibuka.contains(.banner))
+        #expect(!PenanganNotifikasi.opsiSaatDibuka.contains(.sound))
+    }
+
     @Test("Jingle BRImo ada di bundle app, format CAF, di bawah batas 30 detik iOS")
     func jingleDiBundle() async throws {
         let nama = PushNotifikasi.namaSuara

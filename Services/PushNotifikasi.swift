@@ -1,4 +1,6 @@
+import AudioToolbox
 import Foundation
+import UIKit
 import UserNotifications
 
 /// Push notification "Transfer berhasil" dari server, dengan jingle BRImo.
@@ -38,35 +40,87 @@ enum PushNotifikasi {
 }
 
 /// Menampilkan push sebagai notifikasi lokal. Izin diminta saat transfer pertama berhasil, bukan saat app dibuka.
+///
+/// Jingle: transfer berhasil selalu terjadi saat app dibuka, jadi saat app aktif jingle diputar app sendiri
+/// (`JingleBRImo`). Dengan begitu jingle tetap terdengar walaupun izin notifikasi belum diberikan atau ditolak.
+/// Banner di depan tampil tanpa bunyi (`PenanganNotifikasi`), supaya jingle tidak dobel. Saat app di latar belakang,
+/// iOS yang memutar jingle lewat notifikasi.
 struct PengirimPushLokal: PengirimPush {
     func transferBerhasil(_ bukti: BuktiTransfer) {
-        Task { await kirim(bukti) }
+        Task { @MainActor in
+            if UIApplication.shared.applicationState == .active {
+                JingleBRImo.putar()
+            }
+            await Self.kirim(bukti)
+        }
     }
 
-    private func kirim(_ bukti: BuktiTransfer) async {
+    private static func kirim(_ bukti: BuktiTransfer) async {
         let pusat = UNUserNotificationCenter.current()
         let pengaturan = await pusat.notificationSettings()
         switch pengaturan.authorizationStatus {
         case .notDetermined:
-            guard (try? await pusat.requestAuthorization(options: [.alert, .sound, .badge])) == true else { return }
+            guard (try? await pusat.requestAuthorization(options: [.alert, .sound, .badge])) == true else {
+                catat("izin notifikasi tidak diberikan; banner tidak tampil, jingle tetap diputar app")
+                return
+            }
         case .authorized, .provisional, .ephemeral:
             break
         case .denied:
+            catat("izin notifikasi ditolak (Settings › Notifications › BRImo); banner tidak tampil, jingle tetap diputar app")
             return
         @unknown default:
             return
         }
-        try? await pusat.add(PushNotifikasi.permintaan(untuk: bukti))
+        do {
+            try await pusat.add(PushNotifikasi.permintaan(untuk: bukti))
+        } catch {
+            catat("notifikasi gagal dijadwalkan: \(error.localizedDescription)")
+        }
+    }
+
+    private static func catat(_ pesan: String) {
+        #if DEBUG
+        print("[Prototipe] Push: \(pesan)")
+        #endif
     }
 }
 
-/// Supaya banner dan jingle tetap muncul saat app sedang dibuka (transfer berhasil selalu terjadi di dalam app).
-/// Dipasang sekali di `PrototipeApp.init`.
+/// Memutar jingle BRImo dari bundle app. Dipakai saat transfer berhasil dan app sedang dibuka.
+/// Lewat System Sound Services, seperti bunyi notifikasi: ikut volume dering dan mode senyap iPhone.
+@MainActor
+enum JingleBRImo {
+    private static var idSuara: SystemSoundID = 0
+
+    /// `true` kalau file jingle ditemukan dan bisa dimuat sebagai system sound.
+    static var tersedia: Bool { muat() != nil }
+
+    static func putar() {
+        guard let id = muat() else { return }
+        AudioServicesPlaySystemSound(id)
+    }
+
+    private static func muat() -> SystemSoundID? {
+        if idSuara != 0 { return idSuara }
+        let nama = PushNotifikasi.namaSuara as NSString
+        guard let url = Bundle.main.url(forResource: nama.deletingPathExtension, withExtension: nama.pathExtension) else {
+            return nil
+        }
+        var id: SystemSoundID = 0
+        guard AudioServicesCreateSystemSoundID(url as CFURL, &id) == kAudioServicesNoError else { return nil }
+        idSuara = id
+        return id
+    }
+}
+
+/// Supaya banner tetap muncul saat app sedang dibuka (transfer berhasil selalu terjadi di dalam app).
+/// Tanpa `.sound`: jingle saat app dibuka diputar `JingleBRImo`. Dipasang sekali di `PrototipeApp.init`.
 final class PenanganNotifikasi: NSObject, UNUserNotificationCenterDelegate, Sendable {
     static let shared = PenanganNotifikasi()
+    static let opsiSaatDibuka: UNNotificationPresentationOptions = [.banner, .list]
 
     nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter,
                                             willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        [.banner, .list, .sound]
+        Self.opsiSaatDibuka
     }
 }

@@ -27,7 +27,10 @@ struct PrototipeApp: App {
             }
             .tint(Warna.utama)
             #if DEBUG
-            .onAppear { navigasi.path = DemoFlags.ruteAwal() }
+            .onAppear {
+                navigasi.path = DemoFlags.ruteAwal()
+                if DemoFlags.putarJingleSaatBuka { JingleBRImo.putar() }
+            }
             #endif
         }
     }
